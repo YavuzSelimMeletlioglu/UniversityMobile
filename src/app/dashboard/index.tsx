@@ -6,12 +6,12 @@ import {
   RefreshControl,
   StyleSheet,
   TouchableOpacity,
+  View,
 } from "react-native";
 import { APIRequest } from "@/src/api/rest";
-import { CourseType, UniversityType } from "@/src/types/apiTypes";
+import { UniversityType } from "@/src/types/apiTypes";
 import { useRouter } from "expo-router";
-
-const API_URL = "courses"; // iOS için http://localhost, Android için http://10.0.2.2
+import { ThemedTouchableOpacity } from "@/src/components/TouchableOpacity";
 
 export default function University() {
   const [courses, setCourses] = useState<UniversityType[]>([]);
@@ -20,9 +20,8 @@ export default function University() {
   const router = useRouter();
 
   const fetchData = async () => {
-    const response = await instance.get<UniversityType[]>("get-universities");
+    const response = await instance.get<UniversityType[]>("universities");
     if (response) {
-      console.log(response);
       setCourses(response);
     }
     setLoading(false);
@@ -43,18 +42,21 @@ export default function University() {
 
   const renderItem = ({ item }: { item: UniversityType }) => {
     return (
-      <TouchableOpacity
-        style={styles.rowsContainer}
-        onPress={() =>
+      <ThemedTouchableOpacity
+        onPress={() => {
           router.push({
-            pathname: `./information/faculty`,
+            pathname: "/dashboard/information/faculty",
             params: { university_id: item.university_id.toString() },
-          })
-        }>
+          });
+        }}>
+        <View style={styles.countContainer}>
+          <View style={styles.circle} />
+          <Text> {item.student_count}</Text>
+        </View>
         <Text style={styles.rows}>
           {item.name}: {item.description}
         </Text>
-      </TouchableOpacity>
+      </ThemedTouchableOpacity>
     );
   };
 
@@ -78,19 +80,22 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 20,
   },
-  rowsContainer: {
-    marginTop: 5,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 10,
-    padding: 10,
-    backgroundColor: "#fff",
-  },
   rows: {
     fontSize: 18,
   },
   headerText: {
     fontSize: 24,
     fontWeight: "bold",
+  },
+  countContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "flex-end",
+  },
+  circle: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: "green",
   },
 });

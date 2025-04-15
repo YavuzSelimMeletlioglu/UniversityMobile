@@ -10,6 +10,7 @@ import {
 import { APIRequest } from "@/src/api/rest";
 import { FacultyType } from "@/src/types/apiTypes";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { ThemedTouchableOpacity } from "@/src/components/TouchableOpacity";
 
 export default function Faculty() {
   const [courses, setCourses] = useState<FacultyType[]>([]);
@@ -22,7 +23,7 @@ export default function Faculty() {
 
   const fetchData = async () => {
     const response = await instance.get<FacultyType[]>(
-      `get-faculties/${university_id}`
+      `faculties/${university_id}`
     );
     if (response) {
       setCourses(response);
@@ -45,8 +46,7 @@ export default function Faculty() {
 
   const renderItem = ({ item }: { item: FacultyType }) => {
     return (
-      <TouchableOpacity
-        style={styles.rowsContainer}
+      <ThemedTouchableOpacity
         onPress={() =>
           router.push({
             pathname: `./department`,
@@ -54,7 +54,7 @@ export default function Faculty() {
           })
         }>
         <Text style={styles.rows}>{item.faculty_name}</Text>
-      </TouchableOpacity>
+      </ThemedTouchableOpacity>
     );
   };
 
@@ -77,14 +77,6 @@ const styles = StyleSheet.create({
   flatList: {
     flex: 1,
     marginTop: 20,
-  },
-  rowsContainer: {
-    marginTop: 5,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 10,
-    padding: 10,
-    backgroundColor: "#fff",
   },
   rows: {
     fontSize: 18,

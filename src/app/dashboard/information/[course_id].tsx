@@ -29,7 +29,7 @@ export default function CourseDetailScreen() {
 
   const fetchData = async () => {
     const response = await instance.get<CourseDetailsType>(
-      `get-course-details/${course_id}`
+      `course-details/${course_id}`
     );
     if (response) {
       setCourseDetail(response);

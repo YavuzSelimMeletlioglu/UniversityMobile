@@ -10,6 +10,7 @@ import {
 import { APIRequest } from "@/src/api/rest";
 import { DepartmentType } from "@/src/types/apiTypes";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { ThemedTouchableOpacity } from "@/src/components/TouchableOpacity";
 
 export default function Department() {
   const [courses, setCourses] = useState<DepartmentType[]>([]);
@@ -22,10 +23,9 @@ export default function Department() {
 
   const fetchData = async () => {
     const response = await instance.get<DepartmentType[]>(
-      `get-departments/${faculty_id}`
+      `departments/${faculty_id}`
     );
     if (response) {
-      console.log(response);
       setCourses(response);
     }
     setLoading(false);
@@ -46,8 +46,7 @@ export default function Department() {
 
   const renderItem = ({ item }: { item: DepartmentType }) => {
     return (
-      <TouchableOpacity
-        style={styles.rowsContainer}
+      <ThemedTouchableOpacity
         onPress={() =>
           router.push({
             pathname: `./course`,
@@ -56,7 +55,7 @@ export default function Department() {
         }>
         <Text style={styles.rows}>{item.department_name}</Text>
         <Text style={styles.rows}>Dekan : {item.dean}</Text>
-      </TouchableOpacity>
+      </ThemedTouchableOpacity>
     );
   };
 
@@ -79,14 +78,6 @@ const styles = StyleSheet.create({
   flatList: {
     flex: 1,
     marginTop: 20,
-  },
-  rowsContainer: {
-    marginTop: 5,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 10,
-    padding: 10,
-    backgroundColor: "#fff",
   },
   rows: {
     fontSize: 18,

@@ -1,12 +1,5 @@
 import { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  KeyboardAvoidingView,
-  Pressable,
-} from "react-native";
+import { View, StyleSheet, KeyboardAvoidingView } from "react-native";
 import { APIRequest } from "@/src/api/rest";
 import { useRouter } from "expo-router";
 import { Input } from "@/src/components/Input";
@@ -22,9 +15,12 @@ export default function Auth() {
   const login = async () => {
     if (email != "" && password != "") {
       const response = await instance.post("auth", { email, password });
-      console.log(response);
+
       if (response && response.success) {
-        router.replace("/dashboard/information");
+        router.replace({
+          pathname: "/dashboard",
+          params: { student_id: response.student_id },
+        });
         return;
       } else {
         alert("Giriş yapılamadı!");

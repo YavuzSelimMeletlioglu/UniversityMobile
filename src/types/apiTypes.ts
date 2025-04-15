@@ -20,7 +20,8 @@ export type UniversityType = {
     contact: string,
     description: string,
     name: string,
-    university_id: number
+    university_id: number,
+    student_count: number
 }
 
 export type FacultyType = {
@@ -34,4 +35,18 @@ export type DepartmentType = {
     department_id: number,
     department_name: string,
     faculty_id: number
+}
+
+export type MessageListType = {
+    name: string;
+    receiver_id: number
+}
+
+export type MessageType = {
+    id: number;
+    sender_id: number;
+    receiver_id: number,
+    message: string;
+    send_date: Date;
+
 }

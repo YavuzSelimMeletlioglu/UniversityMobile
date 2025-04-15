@@ -26,8 +26,6 @@ export default function Register() {
       department_name: departmentName,
     };
     const result = await instance.post("register", reqData);
-    console.log("Result: " + result.message, " ", result.success);
-    console.log("Request Data: " + reqData.email, " ", reqData.password);
     if (result.success) {
       router.back();
     }
