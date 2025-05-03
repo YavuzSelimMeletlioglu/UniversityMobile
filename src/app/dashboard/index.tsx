@@ -7,11 +7,13 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  SafeAreaView,
 } from "react-native";
 import { APIRequest } from "@/src/api/rest";
 import { UniversityType } from "@/src/types/apiTypes";
 import { useRouter } from "expo-router";
 import { ThemedTouchableOpacity } from "@/src/components/TouchableOpacity";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 export default function University() {
   const [courses, setCourses] = useState<UniversityType[]>([]);
@@ -50,7 +52,7 @@ export default function University() {
           });
         }}>
         <View style={styles.countContainer}>
-          <View style={styles.circle} />
+          <MaterialIcons name="person" size={20} color="black" />
           <Text> {item.student_count}</Text>
         </View>
         <Text style={styles.rows}>
@@ -65,7 +67,7 @@ export default function University() {
       data={courses}
       keyExtractor={(item) => item.university_id.toString()}
       renderItem={renderItem}
-      ListHeaderComponent={<Text style={styles.headerText}>Universiteler</Text>}
+      ListHeaderComponent={<Text style={styles.headerText}>Üniversiteler</Text>}
       refreshControl={
         <RefreshControl onRefresh={onRefresh} refreshing={loading} />
       }
@@ -84,6 +86,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   headerText: {
+    marginTop: 20,
     fontSize: 24,
     fontWeight: "bold",
   },
