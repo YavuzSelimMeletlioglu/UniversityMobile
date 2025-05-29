@@ -11,6 +11,30 @@ export default function InformationLayout() {
       <Stack.Screen
         name="faculty"
         options={{
+          headerBackVisible: false,
+          title: "Fakülteler",
+          headerLeft: () => (
+            <TouchableOpacity
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+              onPress={() => router.navigate("/dashboard")}>
+              <MaterialIcons
+                name="arrow-back-ios-new"
+                size={24}
+                color="#2962FF"
+              />
+              <Text style={{ color: "rgb(0, 110, 255)", fontSize: 16 }}>
+                Üniversiteler
+              </Text>
+            </TouchableOpacity>
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="university_details"
+        options={{
           title: "Fakülteler",
           headerLeft: () => (
             <TouchableOpacity

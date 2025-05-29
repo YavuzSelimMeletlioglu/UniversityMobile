@@ -1,18 +1,35 @@
+export type ApiResponse<T = any> = {
+    message: string;
+    data: T;
+    success: boolean
+}
+
+export type LoginResponse = {
+    token: string;
+    user: {
+        id: number;
+        name: string;
+        email: string;
+        role: string;
+    };
+    success: boolean
+    message: string
+};
+
+
 export type CourseType = {
-    course_id: number;
-    course_code: string;
-    course_name: string;
+    id: number;
+    code: string;
+    name: string;
 }
 
 export type CourseDetailsType = {
-    course_detail_id: number,
-    course_id: number,
-    lecturer: string,
-    schedule: string,
-    text_book: string,
-    notes: string,
-    course_code: string,
-    course_name: string
+    id: number;
+    code: string;
+    name: string;
+    lecturer: string | null;
+    schedule: string | null;
+    text_book: string | null
 }
 
 export type UniversityType = {
@@ -20,21 +37,33 @@ export type UniversityType = {
     contact: string,
     description: string,
     name: string,
-    university_id: number,
+    id: number,
     student_count: number
 }
 
+export type UniversityDetail = {
+    id: number;
+    name: string;
+    description?: string;
+    address?: string;
+    phone?: string;
+    website?: string;
+    logo?: string;
+    quota?: number;
+};
+
 export type FacultyType = {
-    faculty_id: number,
-    faculty_name: string,
+    id: number,
+    name: string,
     university_id: number
 }
 
 export type DepartmentType = {
     dean: string,
-    department_id: number,
-    department_name: string,
+    id: number,
+    name: string,
     faculty_id: number
+    faculty: FacultyType
 }
 
 export type MessageListType = {

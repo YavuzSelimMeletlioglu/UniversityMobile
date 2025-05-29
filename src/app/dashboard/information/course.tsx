@@ -6,6 +6,7 @@ import {
   RefreshControl,
   StyleSheet,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { APIRequest } from "@/src/api/rest";
 import { CourseType } from "@/src/types/apiTypes";
@@ -23,17 +24,22 @@ export default function Course() {
 
   const fetchData = async () => {
     const response = await instance.get<CourseType[]>(
-      `courses/${department_id}`
+      `departments/${department_id}/courses`
     );
     if (response) {
-      setCourses(response);
+      if (response.success) {
+        console.log(response.data);
+        setCourses(response.data);
+      } else {
+        Alert.alert("Uyarı", response.message);
+      }
     }
     setLoading(false);
   };
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [department_id]);
 
   if (loading) {
     return <ActivityIndicator size="large" color="blue" />;
@@ -49,12 +55,12 @@ export default function Course() {
       <ThemedTouchableOpacity
         onPress={() =>
           router.push({
-            pathname: `./${item.course_id}`,
-            params: { course_code: item.course_code },
+            pathname: `./${item.id}`,
+            params: { course_code: item.code },
           })
         }>
         <Text style={styles.rows}>
-          {item.course_code}: {item.course_name}
+          {item.code}: {item.name}
         </Text>
       </ThemedTouchableOpacity>
     );
@@ -63,7 +69,7 @@ export default function Course() {
   return (
     <FlatList
       data={courses}
-      keyExtractor={(item) => item.course_id.toString()}
+      keyExtractor={(item) => item.id.toString()}
       renderItem={renderItem}
       ListHeaderComponent={<Text style={styles.headerText}>Courses</Text>}
       refreshControl={

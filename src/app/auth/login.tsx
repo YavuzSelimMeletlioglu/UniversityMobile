@@ -4,6 +4,7 @@ import { APIRequest } from "@/src/api/rest";
 import { useRouter } from "expo-router";
 import { Input } from "@/src/components/Input";
 import { Button } from "@/src/components/Button";
+import { ApiResponse, LoginResponse } from "@/src/types/apiTypes";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
@@ -14,26 +15,35 @@ export default function Auth() {
 
   const login = async () => {
     if (email != "" && password != "") {
-      const response = await instance.post("auth", { email, password });
-
-      if (response && response.success) {
-        router.replace({
-          pathname: "/dashboard",
-          params: { student_id: response.student_id },
-        });
-        return;
+      const response = await instance.loginPost("login", {
+        email,
+        password,
+      });
+      if (response) {
+        if (response.success) {
+          instance.setSecret(response.token);
+          router.replace({
+            pathname: "/dashboard",
+            params: { user_id: response.user.id },
+          });
+          return;
+        } else {
+          alert(response.message);
+        }
       } else {
-        alert("Giriş yapılamadı!");
+        alert("Gerekli bilgileri giriniz!");
       }
-    } else {
-      alert("Gerekli bilgileri giriniz!");
     }
   };
 
   return (
     <KeyboardAvoidingView style={styles.container}>
       <Input placeholder="Email" onChangeText={(text) => setEmail(text)} />
-      <Input placeholder="Şifre" onChangeText={(text) => setPassword(text)} />
+      <Input
+        placeholder="Şifre"
+        secureTextEntry={true}
+        onChangeText={(text) => setPassword(text)}
+      />
       <View style={styles.buttonContainer}>
         <Button title="Giriş Yap" onPress={login} />
         <Button

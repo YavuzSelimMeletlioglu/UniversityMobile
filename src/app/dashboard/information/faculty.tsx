@@ -6,6 +6,7 @@ import {
   RefreshControl,
   StyleSheet,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { APIRequest } from "@/src/api/rest";
 import { FacultyType } from "@/src/types/apiTypes";
@@ -23,17 +24,22 @@ export default function Faculty() {
 
   const fetchData = async () => {
     const response = await instance.get<FacultyType[]>(
-      `faculties/${university_id}`
+      `universities/${university_id}/faculties`
     );
     if (response) {
-      setCourses(response);
+      if (response.success) {
+        setCourses(response.data);
+      } else {
+        Alert.alert("Uyarı", response.message);
+      }
     }
     setLoading(false);
   };
 
   useEffect(() => {
+    console.log(university_id);
     fetchData();
-  }, []);
+  }, [university_id]);
 
   if (loading) {
     return <ActivityIndicator size="large" color="blue" />;
@@ -50,10 +56,10 @@ export default function Faculty() {
         onPress={() =>
           router.push({
             pathname: `./department`,
-            params: { faculty_id: item.faculty_id.toString() },
+            params: { faculty_id: item.id.toString() },
           })
         }>
-        <Text style={styles.rows}>{item.faculty_name}</Text>
+        <Text style={styles.rows}>{item.name}</Text>
       </ThemedTouchableOpacity>
     );
   };
@@ -61,7 +67,7 @@ export default function Faculty() {
   return (
     <FlatList
       data={courses}
-      keyExtractor={(item) => item.faculty_id.toString()}
+      keyExtractor={(item) => item.id.toString()}
       renderItem={renderItem}
       ListHeaderComponent={<Text style={styles.headerText}>Fakülteler</Text>}
       refreshControl={

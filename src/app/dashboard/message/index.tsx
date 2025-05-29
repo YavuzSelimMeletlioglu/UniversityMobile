@@ -25,13 +25,13 @@ type MessageListResponseType = {
 export default function Messages() {
   const [isRefreshing, setIsRefreshing] = useState(true);
   const [receivers, setReceivers] = useState<MessageListType[]>([]);
-  const { student_id } = useGlobalSearchParams<{ student_id: string }>();
+  const { user_id } = useGlobalSearchParams<{ user_id: string }>();
 
   const instance = APIRequest.INSTANCE();
 
   const fetchData = async () => {
-    const response = await instance.get<MessageListResponseType>(
-      `messages/${student_id}`
+    const response = await instance.get<MessageListType[]>(
+      `messages/${user_id}`
     );
 
     if (response && response.success) {
@@ -50,15 +50,19 @@ export default function Messages() {
   }, []);
 
   const renderItem = ({ item }: { item: MessageListType }) => {
+    const capitalize = (str: string): string => {
+      if (!str) return "";
+      return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    };
     return (
       <ThemedTouchableOpacity
         onPress={() => {
           router.push({
             pathname: `./message/messages`,
-            params: { sender_id: student_id, receiver_id: item.receiver_id },
+            params: { sender_id: user_id, receiver_id: item.receiver_id },
           });
         }}>
-        <Text style={styles.rows}>{item.name}</Text>
+        <Text style={styles.rows}>{capitalize(item.name)}</Text>
       </ThemedTouchableOpacity>
     );
   };

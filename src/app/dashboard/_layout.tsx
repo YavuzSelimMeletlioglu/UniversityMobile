@@ -2,7 +2,7 @@ import { Tabs, useLocalSearchParams } from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 export default function TabLayout() {
-  const { student_id } = useLocalSearchParams<{ student_id: string }>();
+  const { user_id } = useLocalSearchParams<{ user_id: string }>();
   return (
     <Tabs
       screenOptions={{
@@ -26,7 +26,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="message"
         initialParams={{
-          student_id: student_id,
+          user_id: user_id,
         }}
         options={{
           tabBarLabel: "Mesajlar",

@@ -10,7 +10,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import { APIRequest } from "@/src/api/rest";
-import { UniversityType } from "@/src/types/apiTypes";
+import { ApiResponse, UniversityType } from "@/src/types/apiTypes";
 import { useRouter } from "expo-router";
 import { ThemedTouchableOpacity } from "@/src/components/TouchableOpacity";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -18,13 +18,16 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 export default function University() {
   const [courses, setCourses] = useState<UniversityType[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedUniversityId, setSelectedUniversityId] = useState<
+    number | null
+  >(null);
   const instance = APIRequest.INSTANCE();
   const router = useRouter();
 
   const fetchData = async () => {
     const response = await instance.get<UniversityType[]>("universities");
-    if (response) {
-      setCourses(response);
+    if (response && response.success) {
+      setCourses(response.data);
     }
     setLoading(false);
   };
@@ -48,16 +51,37 @@ export default function University() {
         onPress={() => {
           router.push({
             pathname: "/dashboard/information/faculty",
-            params: { university_id: item.university_id.toString() },
+            params: { university_id: item.id.toString() },
           });
         }}>
-        <View style={styles.countContainer}>
-          <MaterialIcons name="person" size={20} color="black" />
-          <Text> {item.student_count}</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.rows}>{item.name}</Text>
+            <Text style={{ color: "#555" }}>{item.description}</Text>
+          </View>
+          <View style={styles.countContainer}>
+            <MaterialIcons name="person" size={20} color="black" />
+            <Text> {item.student_count}</Text>
+          </View>
+
+          {/* Detay ikonu */}
+          <MaterialIcons
+            name="info-outline"
+            size={24}
+            color="#007BFF"
+            onPress={() => {
+              router.push({
+                pathname: "/dashboard/information/university_details",
+                params: { university_id: item.id.toString() },
+              });
+            }}
+          />
         </View>
-        <Text style={styles.rows}>
-          {item.name}: {item.description}
-        </Text>
       </ThemedTouchableOpacity>
     );
   };
@@ -65,7 +89,7 @@ export default function University() {
   return (
     <FlatList
       data={courses}
-      keyExtractor={(item) => item.university_id.toString()}
+      keyExtractor={(item) => item.id.toString()}
       renderItem={renderItem}
       ListHeaderComponent={<Text style={styles.headerText}>Üniversiteler</Text>}
       refreshControl={

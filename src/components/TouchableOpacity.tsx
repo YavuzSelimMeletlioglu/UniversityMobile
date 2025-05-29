@@ -20,10 +20,6 @@ export function ThemedTouchableOpacity({ children, ...props }: Props) {
 const styles = StyleSheet.create({
   container: {
     marginTop: 5,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 10,
     padding: 10,
-    backgroundColor: "#fff",
   },
 });

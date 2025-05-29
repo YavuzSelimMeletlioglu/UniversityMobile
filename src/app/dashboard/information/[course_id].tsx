@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   Button,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { CourseDetailsType } from "@/src/types/apiTypes";
@@ -29,17 +30,22 @@ export default function CourseDetailScreen() {
 
   const fetchData = async () => {
     const response = await instance.get<CourseDetailsType>(
-      `course-details/${course_id}`
+      `/courses/${course_id}`
     );
     if (response) {
-      setCourseDetail(response);
+      if (response.success) {
+        setCourseDetail(response.data);
+      } else {
+        Alert.alert("Uyarı", response.message);
+      }
+      console.log(response.data);
     }
     setRefreshing(false);
   };
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [course_id]);
 
   if (refreshing) {
     return <ActivityIndicator size="large" color="blue" />;
@@ -79,11 +85,16 @@ export default function CourseDetailScreen() {
           headerTitle: course_code,
         }}
       />
-      <Text style={styles.header}>{courseDetail.course_name}</Text>
-      <Row rowNameText="Eğitmen" dataText={courseDetail.lecturer} />
-      <Row rowNameText="Takvim" dataText={courseDetail.schedule} />
-      <Row rowNameText="Yardımcı Kaynak" dataText={courseDetail.text_book} />
-      <Row rowNameText="Notlar" dataText={courseDetail.notes} />
+      <Text style={styles.header}>{courseDetail.name}</Text>
+      {courseDetail.lecturer && (
+        <Row rowNameText="Eğitmen" dataText={courseDetail.lecturer} />
+      )}
+      {courseDetail.schedule && (
+        <Row rowNameText="Takvim" dataText={courseDetail.schedule} />
+      )}
+      {courseDetail.text_book && (
+        <Row rowNameText="Yardımcı Kaynak" dataText={courseDetail.text_book} />
+      )}
     </View>
   );
 }
@@ -97,11 +108,7 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: "row",
     columnGap: 5,
-    backgroundColor: "#fff",
     padding: 5,
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: "#888",
   },
   header: {
     fontSize: 24,

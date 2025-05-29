@@ -38,15 +38,16 @@ export default function Messages() {
   const { sender_id, receiver_id } = useLocalSearchParams<{
     sender_id: string;
     receiver_id: string;
+    receiver_name: string;
   }>();
 
   const instance = APIRequest.INSTANCE();
 
   const fetchData = async () => {
-    const response = await instance.post<MessageResponseType>(
-      `messages/details`,
-      { student_id: Number(sender_id), receiver_id: Number(receiver_id) }
-    );
+    const response = await instance.post<MessageType[]>(`messages/details`, {
+      sender_id: Number(sender_id),
+      receiver_id: Number(receiver_id),
+    });
     if (response && response.success) {
       setMessages(response.data);
     }
