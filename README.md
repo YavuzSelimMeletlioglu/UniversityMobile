@@ -1,50 +1,221 @@
-# Welcome to your Expo app 👋
+# UnivercityMobile
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+> 🇹🇷 Türkçe açıklama aşağıda yer almaktadır. | 🇬🇧 English description follows below.
 
-## Get started
+---
 
-1. Install dependencies
+## 🇹🇷 Türkçe
 
-   ```bash
-   npm install
-   ```
+### Proje Hakkında
 
-2. Start the app
+**UnivercityMobile**, üniversite bilgilerini kolayca keşfetmek ve kullanıcılar arasında mesajlaşmak için geliştirilmiş bir React Native mobil uygulamasıdır. Uygulama, Expo framework'ü kullanılarak iOS ve Android platformlarında çalışacak şekilde tasarlanmıştır.
 
-   ```bash
-    npx expo start
-   ```
+### Özellikler
 
-In the output, you'll find options to open the app in a
+- 🔐 **Kullanıcı Kimlik Doğrulama** — E-posta ve şifre ile giriş yapma ve kayıt olma
+- 🏛️ **Üniversite Listesi** — Tüm üniversiteleri öğrenci sayılarıyla birlikte görüntüleme
+- 🔍 **Üniversite Detayları** — Adres, telefon, web sitesi, kontenjan ve logo bilgileri
+- 🏫 **Fakülteler** — Seçilen üniversiteye ait fakülteleri listeleme
+- 📚 **Bölümler** — Fakülteye bağlı bölümleri ve dekan bilgilerini görüntüleme
+- 📖 **Dersler** — Bölüme ait dersleri listeleme
+- 📝 **Ders Detayı** — Ders kodu, öğretim üyesi, ders programı ve ders kitabı bilgisi
+- 💬 **Mesajlaşma** — Kullanıcılar arası anlık mesajlaşma sistemi
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### Navigasyon Yapısı
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+Giriş / Kayıt
+└── Dashboard (Alt Sekme Çubuğu)
+    ├── Üniversiteler
+    │   └── Fakülteler
+    │       └── Bölümler
+    │           └── Dersler
+    │               └── Ders Detayı
+    └── Mesajlar
+        └── Konuşma Ekranı
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Teknolojiler
 
-## Learn more
+| Teknoloji | Sürüm |
+|---|---|
+| React Native | 0.76.7 |
+| Expo | ~52.0.33 |
+| Expo Router | ~4.0.17 |
+| TypeScript | ^5.3.3 |
+| Axios | ^1.7.9 |
+| React Native Paper | ^5.14.0 |
 
-To learn more about developing your project with Expo, look at the following resources:
+### Kurulum ve Çalıştırma
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+**Gereksinimler:** Node.js, npm veya yarn, Expo Go uygulaması (mobil cihaz için)
 
-## Join the community
+```bash
+# Bağımlılıkları yükleyin
+npm install
 
-Join our community of developers creating universal apps.
+# Geliştirme sunucusunu başlatın
+npm start
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+# iOS için
+npm run ios
+
+# Android için
+npm run android
+```
+
+> **Not:** Uygulamanın çalışabilmesi için `http://localhost:80/api` adresinde bir backend API sunucusunun çalışıyor olması gerekmektedir.
+
+### API Endpoint'leri
+
+| Endpoint | Açıklama |
+|---|---|
+| `POST /login` | Kullanıcı girişi |
+| `POST /register` | Yeni kullanıcı kaydı |
+| `GET /universities` | Tüm üniversitelerin listesi |
+| `GET /universities/:id` | Üniversite detayları |
+| `GET /universities/:id/faculties` | Üniversiteye ait fakülteler |
+| `GET /departments/uni/:id` | Üniversiteye ait bölümler |
+| `GET /messages/:user_id` | Kullanıcının mesaj listesi |
+| `POST /messages/details` | İki kullanıcı arasındaki mesajlar |
+| `POST /messages/send` | Mesaj gönderme |
+
+### Proje Yapısı
+
+```
+UnivercityMobile/
+├── src/
+│   ├── api/
+│   │   └── rest.ts              # API istek sınıfı (Axios)
+│   ├── app/
+│   │   ├── _layout.tsx          # Kök navigasyon yapısı
+│   │   ├── index.tsx            # Giriş yönlendirme sayfası
+│   │   ├── auth/
+│   │   │   ├── login.tsx        # Giriş ekranı
+│   │   │   └── register.tsx     # Kayıt ekranı
+│   │   └── dashboard/
+│   │       ├── _layout.tsx      # Alt sekme çubuğu
+│   │       ├── index.tsx        # Üniversite listesi
+│   │       ├── information/     # Bilgi sayfaları (fakülte, bölüm, ders)
+│   │       └── message/         # Mesajlaşma sayfaları
+│   ├── components/
+│   │   ├── Button.tsx           # Ortak buton bileşeni
+│   │   ├── Input.tsx            # Ortak giriş bileşeni
+│   │   └── TouchableOpacity.tsx # Temalı dokunma bileşeni
+│   └── types/
+│       └── apiTypes.ts          # TypeScript tip tanımlamaları
+├── assets/                      # Görseller, ikonlar, fontlar
+├── app.json                     # Expo uygulama yapılandırması
+└── package.json
+```
+
+---
+
+## 🇬🇧 English
+
+### About the Project
+
+**UnivercityMobile** is a React Native mobile application designed to help users easily discover university information and communicate with each other via messaging. Built with the Expo framework, it runs on both iOS and Android platforms.
+
+### Features
+
+- 🔐 **User Authentication** — Login and registration with email and password
+- 🏛️ **University Listing** — Browse all universities with student count information
+- 🔍 **University Details** — View address, phone, website, quota, and logo
+- 🏫 **Faculties** — List all faculties within a selected university
+- 📚 **Departments** — View departments and their deans within a faculty
+- 📖 **Courses** — List available courses for a selected department
+- 📝 **Course Details** — Course code, lecturer, schedule, and textbook information
+- 💬 **Messaging** — Real-time messaging system between users
+
+### Navigation Structure
+
+```
+Login / Register
+└── Dashboard (Bottom Tab Bar)
+    ├── Universities
+    │   └── Faculties
+    │       └── Departments
+    │           └── Courses
+    │               └── Course Detail
+    └── Messages
+        └── Conversation Screen
+```
+
+### Tech Stack
+
+| Technology | Version |
+|---|---|
+| React Native | 0.76.7 |
+| Expo | ~52.0.33 |
+| Expo Router | ~4.0.17 |
+| TypeScript | ^5.3.3 |
+| Axios | ^1.7.9 |
+| React Native Paper | ^5.14.0 |
+
+### Getting Started
+
+**Prerequisites:** Node.js, npm or yarn, Expo Go app (for physical device testing)
+
+```bash
+# Install dependencies
+npm install
+
+# Start the development server
+npm start
+
+# Run on iOS
+npm run ios
+
+# Run on Android
+npm run android
+```
+
+> **Note:** The app requires a backend API server running at `http://localhost:80/api`.
+
+### API Endpoints
+
+| Endpoint | Description |
+|---|---|
+| `POST /login` | User login |
+| `POST /register` | New user registration |
+| `GET /universities` | List all universities |
+| `GET /universities/:id` | University details |
+| `GET /universities/:id/faculties` | Faculties of a university |
+| `GET /departments/uni/:id` | Departments of a university |
+| `GET /messages/:user_id` | User's message list |
+| `POST /messages/details` | Messages between two users |
+| `POST /messages/send` | Send a message |
+
+### Project Structure
+
+```
+UnivercityMobile/
+├── src/
+│   ├── api/
+│   │   └── rest.ts              # API request class (Axios)
+│   ├── app/
+│   │   ├── _layout.tsx          # Root navigation layout
+│   │   ├── index.tsx            # Entry redirect page
+│   │   ├── auth/
+│   │   │   ├── login.tsx        # Login screen
+│   │   │   └── register.tsx     # Registration screen
+│   │   └── dashboard/
+│   │       ├── _layout.tsx      # Bottom tab bar layout
+│   │       ├── index.tsx        # University list screen
+│   │       ├── information/     # Info screens (faculty, department, course)
+│   │       └── message/         # Messaging screens
+│   ├── components/
+│   │   ├── Button.tsx           # Shared button component
+│   │   ├── Input.tsx            # Shared input component
+│   │   └── TouchableOpacity.tsx # Themed touchable component
+│   └── types/
+│       └── apiTypes.ts          # TypeScript type definitions
+├── assets/                      # Images, icons, fonts
+├── app.json                     # Expo app configuration
+└── package.json
+```
+
+### License
+
+This project is private. All rights reserved.
