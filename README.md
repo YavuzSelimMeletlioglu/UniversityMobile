@@ -223,7 +223,3 @@ UnivercityMobile/
 ├── app.json                     # Expo app configuration
 └── package.json
 ```
-
-### License
-
-This project is private. All rights reserved.
